@@ -1,0 +1,19 @@
+[1mdiff --git a/docs/HANDOFF.md b/docs/HANDOFF.md[m
+[1mindex 346c005..8a413d2 100644[m
+[1m--- a/docs/HANDOFF.md[m
+[1m+++ b/docs/HANDOFF.md[m
+[36m@@ -3,12 +3,12 @@[m
+ Última atualização: <data> por <conta A | conta B>[m
+ [m
+ ## Onde estamos[m
+[31m-Fase 2 (Auth + RBAC), Passo 4A: caso de uso `AutenticarUsuario` (testes T04 a T06).[m
+[32m+[m[32mFase 2 (Auth + RBAC), Passo 4B: caso de uso CriarUsuario (testes T07 e T08).[m
+ [m
+ ## Concluído[m
+ - Fase 1 (Fundação): repo, CLAUDE.md, README, Docker (Postgres na porta 5436 com supplement_dev e supplement_test), ambiente api/ (TypeScript, Vitest).[m
+ - Passo 3B: entidade `Usuario` e mapa de permissões (T01 a T03, 38 testes verdes).[m
+[31m-- Passo 4A: contratos (IUsuarioRepository, IHashService, ITokenService, ErroDeNegocio), fakes em src/testing/fakes.ts, teste e implementação de AutenticarUsuario entregues. CONFIRMAR: vermelho, verde (42 testes) e commit.[m
+[32m+[m[32m- Passo 4A: contratos (IUsuarioRepository, IHashService, ITokenService, ErroDeNegocio), fakes em src/testing/fakes.ts, teste e implementação de AutenticarUsuario entregues. CONFIRMAR: vermelho, verde (42 testes) e commit. por Validado: 42 testes verdes.[m
+ [m
+ ## Próximo passo[m
+ Passo 4B: `CriarUsuario` (T07: e-mail duplicado, case-insensitive, gera EMAIL_JA_CADASTRADO; T08: salva e-mail em minúsculas e senha como hash). Depois 4C (AtualizarUsuario com regra do último ADMIN, AlterarSenha: T09, T10), Passo 5 (infra: Prisma, bcrypt, JWT), Passo 6 (Express, middlewares, integração T11 a T15), Passo 7 (seed do primeiro ADMIN).[m

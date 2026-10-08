@@ -3,12 +3,12 @@
 Última atualização: <data> por <conta A | conta B>
 
 ## Onde estamos
-Fase 2 (Auth + RBAC), Passo 4A: caso de uso `AutenticarUsuario` (testes T04 a T06).
+Fase 2 (Auth + RBAC), Passo 4B: caso de uso CriarUsuario (testes T07 e T08).
 
 ## Concluído
 - Fase 1 (Fundação): repo, CLAUDE.md, README, Docker (Postgres na porta 5436 com supplement_dev e supplement_test), ambiente api/ (TypeScript, Vitest).
 - Passo 3B: entidade `Usuario` e mapa de permissões (T01 a T03, 38 testes verdes).
-- Passo 4A: contratos (IUsuarioRepository, IHashService, ITokenService, ErroDeNegocio), fakes em src/testing/fakes.ts, teste e implementação de AutenticarUsuario entregues. CONFIRMAR: vermelho, verde (42 testes) e commit.
+- Passo 4A: contratos (IUsuarioRepository, IHashService, ITokenService, ErroDeNegocio), fakes em src/testing/fakes.ts, teste e implementação de AutenticarUsuario entregues. CONFIRMAR: vermelho, verde (42 testes) e commit. por Validado: 42 testes verdes.
 
 ## Próximo passo
 Passo 4B: `CriarUsuario` (T07: e-mail duplicado, case-insensitive, gera EMAIL_JA_CADASTRADO; T08: salva e-mail em minúsculas e senha como hash). Depois 4C (AtualizarUsuario com regra do último ADMIN, AlterarSenha: T09, T10), Passo 5 (infra: Prisma, bcrypt, JWT), Passo 6 (Express, middlewares, integração T11 a T15), Passo 7 (seed do primeiro ADMIN).
