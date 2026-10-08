@@ -12,3 +12,14 @@ export interface Usuario {
 }
 
 export type NovoUsuario = Pick<Usuario, 'nome' | 'email' | 'senhaHash' | 'perfil'>;
+
+export type UsuarioPublico = Pick<Usuario, 'id' | 'nome' | 'email' | 'perfil' | 'ativo'>;
+
+export function paraUsuarioPublico(usuario: Usuario): UsuarioPublico {
+  const { id, nome, email, perfil, ativo } = usuario;
+  return { id, nome, email, perfil, ativo };
+}
+
+export function normalizarEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
