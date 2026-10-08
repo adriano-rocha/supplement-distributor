@@ -105,6 +105,7 @@ interface ITokenService { gerar(payload: { sub: string; perfil: Perfil }): strin
 | T02 | unitário | Perfil VENDEDOR / pede `produtos:escrever` / negado |
 | T03 | unitário | Cada perfil confere com a tabela da seção 5 (teste parametrizado) |
 | T04 | unitário | AutenticarUsuario: credenciais corretas / retorna token e usuário sem senhaHash |
+| T04b | unitário | AutenticarUsuario: e-mail com maiúsculas ou espaços nas pontas / encontra o usuário (RA01) |
 | T05 | unitário | AutenticarUsuario: e-mail inexistente OU senha errada / mesmo erro CREDENCIAIS_INVALIDAS |
 | T06 | unitário | AutenticarUsuario: usuário inativo / CREDENCIAIS_INVALIDAS |
 | T07 | unitário | CriarUsuario: e-mail já existe (maiúsculas/minúsculas) / EMAIL_JA_CADASTRADO |
