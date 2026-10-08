@@ -81,3 +81,8 @@ Nota fiscal, multi-filial, financeiro, importação CSV, pagamento, lote/validad
 - Invariante testada: saldoAtual == soma dos movimentos.
 - Nenhum import de infra em domain/application.
 - Resumo de estudo (🔑) registrado.
+
+## Continuidade entre agentes
+- Ler `docs/HANDOFF.md` antes de qualquer ação; o prompt padrão está em `docs/PROMPT-CONTINUIDADE.md`.
+- Um agente por vez. Antes de começar: `git pull`. Ao terminar: atualizar o HANDOFF, commitar e dar push.
+- Nunca reabrir uma decisão registrada sem avisar o usuário; discordâncias vão para "Decisões em aberto".
