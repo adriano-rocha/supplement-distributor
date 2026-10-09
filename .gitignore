@@ -5,3 +5,4 @@ dist/
 !.env.example
 coverage/
 .DS_Store
+api/src/infra/prisma/generated/
