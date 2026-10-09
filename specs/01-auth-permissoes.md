@@ -111,7 +111,12 @@ interface ITokenService { gerar(payload: { sub: string; perfil: Perfil }): strin
 | T07 | unitário | CriarUsuario: e-mail já existe (maiúsculas/minúsculas) / EMAIL_JA_CADASTRADO |
 | T08 | unitário | CriarUsuario: salva e-mail em minúsculas e senha como hash |
 | T09 | unitário | AtualizarUsuario: rebaixar ou desativar o último ADMIN ativo / ULTIMO_ADMIN |
+| T09b | unitário | AtualizarUsuario: existe outro ADMIN ativo / rebaixar ou desativar é permitido |
+| T09c | unitário | AtualizarUsuario: id inexistente / USUARIO_NAO_ENCONTRADO |
+| T09d | unitário | AtualizarUsuario: alterar só o nome do único ADMIN / permitido |
 | T10 | unitário | AlterarSenha: senha atual incorreta / SENHA_ATUAL_INCORRETA |
+| T10b | unitário | AlterarSenha: senha atual correta / salva o hash da nova senha |
+| T10c | unitário | AlterarSenha: usuário inexistente / USUARIO_NAO_ENCONTRADO |
 | T11 | integração | POST /auth/login válido / 200 e token utilizável em GET /auth/me |
 | T12 | integração | Rota protegida sem token / 401 |
 | T13 | integração | VENDEDOR em POST /usuarios / 403 |
