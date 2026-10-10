@@ -124,6 +124,12 @@ interface ITokenService { gerar(payload: { sub: string; perfil: Perfil }): strin
 | T15 | integração | Nenhuma resposta contém senhaHash |
 | T16 | unitário (infra) | BcryptHashService: gera hash bcrypt de 60 caracteres com salt aleatório; comparar aceita a senha certa e rejeita a errada |
 | T17 | unitário (infra) | JwtTokenService: ida e volta devolve sub e perfil; rejeita outro segredo, token expirado, malformado, perfil inexistente e token sem assinatura (alg none) com NAO_AUTENTICADO |
+| T18 | integração (infra) | PrismaUsuarioRepository.criar: persiste e devolve Usuario com id uuid, ativo true e criadoEm |
+| T19 | integração (infra) | buscarPorEmail e buscarPorId: encontram o registro e devolvem null quando não existe |
+| T20 | integração (infra) | listar devolve todos os usuários |
+| T21 | integração (infra) | atualizar e atualizarSenha alteram só o que foi pedido |
+| T22 | integração (infra) | contarAdminsAtivos conta somente ADMIN ativos |
+| T23 | integração (infra) | e-mail duplicado, sequencial ou simultâneo, gera EMAIL_JA_CADASTRADO pela restrição UNIQUE do banco |
 
 ## 10. Critérios de aceite
 - T01 a T15 implementados e passando.
