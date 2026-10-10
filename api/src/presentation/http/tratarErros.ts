@@ -6,6 +6,7 @@ import { ErroDeNegocio, type CodigoErro } from '../../application/errors/ErroDeN
 const STATUS_POR_CODIGO: Record<CodigoErro, number> = {
   CREDENCIAIS_INVALIDAS: 401,
   NAO_AUTENTICADO: 401,
+  SEM_PERMISSAO: 403,
   EMAIL_JA_CADASTRADO: 409,
   ULTIMO_ADMIN: 409,
   USUARIO_NAO_ENCONTRADO: 404,

@@ -4,7 +4,8 @@ export type CodigoErro =
   | 'ULTIMO_ADMIN'
   | 'USUARIO_NAO_ENCONTRADO'
   | 'SENHA_ATUAL_INCORRETA'
-  | 'NAO_AUTENTICADO';
+  | 'NAO_AUTENTICADO'
+  | 'SEM_PERMISSAO';
 
 export class ErroDeNegocio extends Error {
   constructor(

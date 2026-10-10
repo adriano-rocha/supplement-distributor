@@ -133,6 +133,8 @@ interface ITokenService { gerar(payload: { sub: string; perfil: Perfil }): strin
 | T24 | unitário | lerConfig: ambiente válido devolve configuração tipada (números convertidos, PORT padrão 3333); JWT_SECRET curto, BCRYPT_COST fora de 4 a 15 e variáveis ausentes são rejeitados citando os nomes |
 | T25 | integração (HTTP) | tratarErros: cada código de ErroDeNegocio vira o status da seção 6 (401, 401, 409, 409, 404, 422); ZodError vira 400 VALIDACAO_INVALIDA com detalhes por campo; erro inesperado vira 500 ERRO_INTERNO sem vazar detalhes; erro em handler assíncrono também é tratado |
 | T26 | integração (HTTP) | criarApp: GET /saude responde 200; rota inexistente responde 404 ROTA_NAO_ENCONTRADA; JSON malformado responde 400 CORPO_INVALIDO; cabeçalho x-powered-by removido |
+| T27 | integração (HTTP) | autenticar: sem cabeçalho, esquema diferente de Bearer, token inválido, token expirado, usuário removido ou inativo respondem 401 NAO_AUTENTICADO; token válido segue com req.usuario usando o perfil atual do banco |
+| T28 | integração (HTTP) | autorizar: perfil com a permissão segue (200); perfil sem a permissão responde 403 SEM_PERMISSAO; uso sem autenticar antes responde 401 |
 
 ## 10. Critérios de aceite
 - T01 a T15 implementados e passando.

@@ -20,6 +20,7 @@ const STATUS_ESPERADO: Array<[CodigoErro, number]> = [
   ['ULTIMO_ADMIN', 409],
   ['USUARIO_NAO_ENCONTRADO', 404],
   ['SENHA_ATUAL_INCORRETA', 422],
+  ['SEM_PERMISSAO', 403],
 ];
 
 describe('tratarErros', () => {
