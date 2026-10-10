@@ -1,6 +1,6 @@
 # Spec 02 — Estoque e Pedidos (reserva, estados e cancelamento)
 
-Status: rascunho para revisão. Implementação nas Fases 4 (Estoque) e 5 (Pedidos).
+Status: aprovada pelo usuário em 2026-10-10. Implementação nas Fases 4 (Estoque) e 5 (Pedidos).
 
 ## 1. Objetivo
 Demonstrar um fluxo de várias etapas que mantém os dados consistentes: criar pedido, verificar disponibilidade, reservar estoque, confirmar, despachar e cancelar, com transações, estados e permissões claras.
