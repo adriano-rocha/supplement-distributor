@@ -1,20 +1,21 @@
 # Handoff — estado atual do projeto
 
-Última atualização: 2026-10-08 por conta A
+Última atualização: 2026-10-10 por conta A
 
 ## Onde estamos
-Fase 2 (Auth + RBAC), Passo 5: infraestrutura real (Prisma, bcrypt, JWT) e repositório Prisma. Ainda não iniciado.
+Fase 2 (Auth + RBAC), Passo 5B em andamento: serviços de infraestrutura `BcryptHashService` (IHashService) e `JwtTokenService` (ITokenService), testes primeiro (T16, T17). Etapa atual: instalar bcryptjs/jsonwebtoken, escrever os testes e ver FALHAR antes de implementar.
 
 ## Concluído
 - Fase 1 (Fundação): repo, CLAUDE.md, README, Docker (Postgres na porta 5436 com supplement_dev e supplement_test), ambiente api/ (TypeScript, Vitest).
-- Passo 3B: entidade `Usuario` e mapa de permissões (T01 a T03, 38 testes verdes).
-- Passo 4A: contratos (IUsuarioRepository, IHashService, ITokenService, ErroDeNegocio), fakes em src/testing/fakes.ts, `AutenticarUsuario` (T04 a T06).
-- Passo 4B: `CriarUsuario` (T07, T08), com mutation check feito.
-- Passo 4C: `AtualizarUsuario` (regra do último ADMIN) e `AlterarSenha` (T09 a T10c). Camada de aplicação da Fase 2 completa: 52 testes verdes, typecheck limpo.
+- Passo 3B: entidade `Usuario` e mapa de permissões (T01 a T03).
+- Passo 4A a 4C: contratos, fakes (src/testing/fakes.ts) e casos de uso AutenticarUsuario, CriarUsuario, AtualizarUsuario, AlterarSenha (T04 a T10c). Camada de aplicação completa.
+- Passo 5A: Prisma 7.10.0 instalado e configurado, schema do `Usuario` (e-mail UNIQUE, id uuid gerado pelo banco), migration `criar_usuarios` aplicada em supplement_dev e supplement_test. Cliente gerado removido do Git. 52 testes verdes, typecheck limpo.
 
 ## Próximo passo
-Passo 5 (infra): ANTES de configurar, consultar a documentação oficial atual do Prisma (versão e forma de configuração). Depois: instalar Prisma, schema do Usuario com UNIQUE no e-mail, migration, `PrismaUsuarioRepository` (implementa IUsuarioRepository), `BcryptHashService` (IHashService), `JwtTokenService` (ITokenService). Testes de integração do repositório contra o banco supplement_test.
-Depois: Passo 6 (Express, middlewares `autenticar` e `autorizar`, Zod, testes de integração T11 a T15) e Passo 7 (seed do primeiro ADMIN).
+- Passo 5B: `npm install bcryptjs jsonwebtoken` e `npm install -D @types/jsonwebtoken`; adicionar 'NAO_AUTENTICADO' ao ErroDeNegocio; criar BcryptHashService e JwtTokenService em api/src/infra/security/ com testes T16 (bcrypt: hash de 60 caracteres, salt aleatório, comparar) e T17 (JWT: ida e volta, outro segredo, expirado, malformado, perfil inexistente, alg none). Esperado: 61 testes.
+- Passo 5C: `PrismaUsuarioRepository` com testes de integração no banco supplement_test (traduzir violação do UNIQUE do e-mail para EMAIL_JA_CADASTRADO; regra do último ADMIN em transação).
+- Passo 6: Express, middlewares `autenticar` e `autorizar`, Zod, testes de integração T11 a T15.
+- Passo 7: seed do primeiro ADMIN.
 
 ## Roadmap (9 fases)
 1 Fundação ✅ | 2 Auth+RBAC 🔄 | 3 Produtos | 4 Movimentação (ledger) | 5 Vendas | 6 Relatórios | 7 Frontend base | 8 Dashboard | 9 Seed e deploy. Entrega final: documento didático do projeto inteiro.
@@ -22,25 +23,18 @@ Depois: Passo 6 (Express, middlewares `autenticar` e `autorizar`, Zod, testes de
 ## Decisões já tomadas (não reabrir sem avisar o usuário)
 - Projeto fictício: distribuidora de suplementos B2B (clientes são varejistas).
 - Stack: React + Vite + TS + Tailwind + shadcn (gráficos: shadcn charts/Recharts; ECharts só pontual); Node + Express + TS + Zod + Prisma; Postgres (Docker em dev/teste, Neon em produção); Vitest + Supertest; deploy Vercel + Render + Neon.
+- Prisma 7 (NÃO o 8, que ainda é release candidate): `prisma@7`, `@prisma/client@7`, `@prisma/adapter-pg@7`, `pg`, `dotenv`. Arquivo de config `api/prisma7.config.ts`. Gerador `prisma-client` com `moduleFormat = "cjs"` e saída em `api/src/infra/prisma/generated` (ignorado pelo Git; recriar com `npx prisma generate`).
+- Hash de senha: `bcryptjs` (algoritmo bcrypt em JS puro, sem binário nativo); token: `jsonwebtoken` com HS256 fixado na geração e na verificação.
 - Fora do escopo: lote/validade, nota fiscal, multi-filial, financeiro, pagamento, importação CSV.
 - Ledger de movimentações; saldoAtual é cache; estoque nunca negativo; venda + baixa na mesma transação; snapshot de preço; estorno em vez de exclusão; soft delete; Decimal para dinheiro.
-- Spec 01 (D1 a D6): sem cadastro público; JWT 1h sem refresh; middleware `autenticar` confere usuário ativo no banco; autorização por permissão; bcrypt (custo por env); erro de login genérico.
+- Spec 01 (D1 a D6): sem cadastro público; JWT 1h sem refresh; middleware `autenticar` confere usuário ativo no banco; autorização por permissão; bcrypt (custo por env, 12 em produção e 4 nos testes); erro de login genérico.
 - Validação de formato (Zod) na camada de apresentação; regras de negócio nos casos de uso; autorização nos middlewares.
 - Dashboard MVP: 5 KPIs, 5 gráficos, 2 tabelas; v2: gauge de cobertura, ranking de vendedores, exportação CSV.
 
 ## Ambiente e armadilhas conhecidas
-- Windows + PowerShell + VS Code. Comandos npm/vitest/tsc rodam dentro de `api/` (ou `npm --prefix api ...`); git e docker compose na raiz.
+- Windows + PowerShell + VS Code. Comandos npm/vitest/tsc/prisma rodam dentro de `api/`; git e docker compose na raiz (ou `docker compose -f ..\docker-compose.yml` de dentro de api/).
+- Ordem de subida: Docker Desktop aberto, container supplement-db `healthy`, depois Prisma e testes. Erro P1001 = banco fora do ar.
 - Postgres do Docker na porta externa 5436 (outras portas já em uso pelo usuário).
-- TypeScript: module/moduleResolution NodeNext, projeto CommonJS, imports relativos sem extensão.
-- Criar arquivos: o usuário cola o CONTEÚDO no VS Code no caminho indicado. Nunca colar o invólucro `@' ... '@ | Set-Content` dentro de arquivos.
-- Bind mount de arquivo inexistente no Docker cria pasta: criar o arquivo antes do `docker compose up`.
-- Arquivo "completo, substitui o atual" significa apagar o conteúdo antigo inteiro antes de colar.
-- Git no PowerShell abre paginador: sair com `q` ou usar `git --no-pager`.
-
-## Decisões em aberto / pendências
-- Verificar a versão atual do Prisma e sua configuração na documentação oficial antes do Passo 5.
-- Passo 5: a unicidade de e-mail precisa de UNIQUE no banco; o repositório Prisma deve traduzir a violação para ErroDeNegocio('EMAIL_JA_CADASTRADO').
-- Passo 5: a regra do último ADMIN (contar e atualizar) precisa de transação ou lock no repositório Prisma para evitar condição de corrida.
-
-## Como encerrar uma sessão
-Pedir ao agente: "gere o docs/HANDOFF.md atualizado", colar no arquivo, commitar e dar push.
+- Migration no banco de teste: `$env:DATABASE_URL="postgresql://supplement:supplement@localhost:5436/supplement_test"; npx prisma migrate deploy; Remove-Item Env:DATABASE_URL`.
+- NUNCA rodar `npm i @prisma/client@latest` nem `npx prisma@latest`: instala o Prisma 8.
+- Bug do npm com dependências opcionais (rolldown/Vitest): se aparecer "Cannot find native binding", apagar node_modules e
