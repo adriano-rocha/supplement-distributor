@@ -2,6 +2,7 @@ services:
   db:
     image: postgres:17-alpine
     container_name: supplement-db
+    restart: unless-stopped
     environment:
       POSTGRES_USER: supplement
       POSTGRES_PASSWORD: supplement
