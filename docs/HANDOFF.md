@@ -52,7 +52,7 @@ Passo 6 (API), em sub-passos guiados, testes primeiro:
 - Regra do último ADMIN: AtualizarUsuario faz "contar admins" e depois "atualizar" em dois passos; dois pedidos simultâneos poderiam rebaixar os dois últimos ADMIN. Decidir como endurecer (transação/lock no repositório) depois do Passo 6.
 - Passo 6: Zod valida o id das rotas como uuid (um id malformado hoje geraria erro do banco, não "não encontrado").
 - Passo 6: separar scripts `test:unit` (sem banco) e `test:integration`; com mais de um arquivo de integração, desativar paralelismo entre arquivos que usam o mesmo banco.
-- Revisar o `npm audit` (4 vulnerabilidades altas reportadas na instalação do bcrypt/jsonwebtoken): avaliar caso a caso se são de desenvolvimento ou produção; nunca usar `--force`.
+- Revisar o npm audit: 4 alertas altos, todos na cadeia da CLI do Prisma (deepmerge-ts, mysql2), dependência de desenvolvimento; risco aceito. Nunca usar `--force` (faria downgrade para o Prisma 6). Reavaliar ao atualizar o Prisma 7 para um patch mais novo e rodar `npm audit --omit=dev` antes do deploy.
 - Deploy (Render, Docker): o build precisa rodar `prisma generate`; o `bcrypt` é módulo nativo, preferir imagem `node:*-slim` (Debian) em vez de alpine e conferir que o binário pré-compilado carrega no container.
 
 ## Como encerrar uma sessão
