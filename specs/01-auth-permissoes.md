@@ -122,6 +122,8 @@ interface ITokenService { gerar(payload: { sub: string; perfil: Perfil }): strin
 | T13 | integração | VENDEDOR em POST /usuarios / 403 |
 | T14 | integração | Usuário desativado com token ainda válido / 401 (decisão D3) |
 | T15 | integração | Nenhuma resposta contém senhaHash |
+| T16 | unitário (infra) | BcryptHashService: gera hash bcrypt de 60 caracteres com salt aleatório; comparar aceita a senha certa e rejeita a errada |
+| T17 | unitário (infra) | JwtTokenService: ida e volta devolve sub e perfil; rejeita outro segredo, token expirado, malformado, perfil inexistente e token sem assinatura (alg none) com NAO_AUTENTICADO |
 
 ## 10. Critérios de aceite
 - T01 a T15 implementados e passando.
