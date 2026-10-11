@@ -135,6 +135,11 @@ interface ITokenService { gerar(payload: { sub: string; perfil: Perfil }): strin
 | T26 | integração (HTTP) | criarApp: GET /saude responde 200; rota inexistente responde 404 ROTA_NAO_ENCONTRADA; JSON malformado responde 400 CORPO_INVALIDO; cabeçalho x-powered-by removido |
 | T27 | integração (HTTP) | autenticar: sem cabeçalho, esquema diferente de Bearer, token inválido, token expirado, usuário removido ou inativo respondem 401 NAO_AUTENTICADO; token válido segue com req.usuario usando o perfil atual do banco |
 | T28 | integração (HTTP) | autorizar: perfil com a permissão segue (200); perfil sem a permissão responde 403 SEM_PERMISSAO; uso sem autenticar antes responde 401 |
+| T29 | unitário | ObterUsuario: devolve o usuário público (sem senhaHash); id inexistente gera USUARIO_NAO_ENCONTRADO |
+| T30 | unitário | ListarUsuarios: devolve todos os usuários sem senhaHash; lista vazia quando não há usuários |
+| T31 | integração (HTTP) | POST /usuarios: ADMIN cria (201, senha salva como hash, resposta sem senhaHash, novo usuário consegue entrar); e-mail duplicado 409; senha curta, perfil inexistente e e-mail malformado 400 com o campo no detalhe |
+| T32 | integração (HTTP) | PATCH /usuarios/:id: atualiza nome e perfil (200); rebaixar o único ADMIN 409; id inexistente 404; id malformado e corpo vazio 400 |
+| T33 | integração (HTTP) | PATCH /auth/senha: 204 e o login passa a exigir a nova senha; senha atual errada 422; nova senha curta 400 |
 
 ## 10. Critérios de aceite
 - T01 a T15 implementados e passando.
