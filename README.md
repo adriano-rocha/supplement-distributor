@@ -68,6 +68,7 @@ A matriz completa está nas specs 01 e 02.
 - **Snapshot de preço** no item do pedido; total calculado no servidor.
 - **Estados finais imutáveis** e **soft delete**; nada é apagado.
 - **Dinheiro em `Decimal`**, nunca `float`.
+- **Perfil e status do usuário vêm do banco a cada requisição:** desativar ou rebaixar vale na hora, sem esperar o token expirar.
 - **Endpoints agregados:** o banco calcula os números do dashboard; o front só desenha.
 
 ## Stack
@@ -91,6 +92,7 @@ presentation → application → domain ← infra
 - `application/`: casos de uso e erros de negócio
 - `infra/`: Prisma e serviços de segurança (implementam as interfaces)
 - `presentation/`: Express, middlewares, rotas e validação
+- `composicao.ts`: raiz de composição (liga as classes concretas às interfaces)
 
 ## Metodologia
 
@@ -98,10 +100,22 @@ Spec-Driven Development: cada feature começa em `specs/`, seguida de testes (vi
 depois da implementação mínima. O contexto do projeto para agentes de IA fica em `CLAUDE.md` e
 o estado atual em `docs/HANDOFF.md`.
 
+## API disponível (Fase 2)
+
+| Método e rota | Quem pode | O que faz |
+|---|---|---|
+| GET /saude | público | verificação de saúde |
+| POST /auth/login | público | e-mail e senha, devolve token e usuário |
+| GET /auth/me | autenticado | dados do usuário logado |
+| PATCH /auth/senha | autenticado | troca a própria senha |
+| GET /usuarios | ADMIN | lista usuários |
+| POST /usuarios | ADMIN | cria usuário |
+| PATCH /usuarios/:id | ADMIN | atualiza nome, perfil ou ativo (sempre resta um ADMIN ativo) |
+
 ## Status
 
 - [x] Fase 1: Fundação (estrutura, CLAUDE.md, README, Docker, ambiente de testes)
-- [ ] Fase 2: Autenticação e permissões (domínio, casos de uso e infraestrutura prontos; base da API pronta; faltam middlewares, rotas e seed)
+- [x] Fase 2: Autenticação e permissões (domínio, casos de uso, Prisma, bcrypt, JWT, API Express, seed do ADMIN)
 - [ ] Fase 3: Produtos e clientes
 - [ ] Fase 4: Estoque (movimentações, reservado e disponível)
 - [ ] Fase 5: Pedidos (reserva, estados, despacho, cancelamento, histórico)
@@ -110,9 +124,30 @@ o estado atual em `docs/HANDOFF.md`.
 - [ ] Fase 8: Dashboard
 - [ ] Fase 9: Seed de dados e deploy
 
-## Como rodar
+## Como rodar (desenvolvimento)
 
-_Será documentado após a Fase 2._
+Requisitos: Node.js 22+, Docker Desktop e Git.
+
+```bash
+git clone https://github.com/adriano-rocha/supplement-distributor.git
+cd supplement-distributor
+docker compose up -d          # PostgreSQL na porta 5436 (bancos supplement_dev e supplement_test)
+cd api
+npm install
+cp .env.example .env          # no PowerShell: Copy-Item .env.example .env
+# edite api/.env: JWT_SECRET (aleatório, 32+ caracteres), ADMIN_EMAIL e ADMIN_SENHA (senha real)
+npx prisma generate
+npx prisma migrate deploy     # cria as tabelas no banco de desenvolvimento
+npm run seed                  # cria o primeiro ADMIN
+npm run dev                   # API em http://localhost:3333
+```
+
+Testes (com o banco no ar): aplique as migrations também no banco de teste e rode a suíte.
+
+```powershell
+$env:DATABASE_URL="postgresql://supplement:supplement@localhost:5436/supplement_test"; npx prisma migrate deploy; Remove-Item Env:DATABASE_URL
+npm test
+```
 
 ## Demo
 
